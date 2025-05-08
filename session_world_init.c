@@ -57,6 +57,6 @@ void pairwise_exchange(int rank, int size, MPI_Comm comm)
     int send_to = (rank + step) % size;
     int recv_from = (rank - step + size) % size;
     MPI_Sendrecv(&dummy, 0, MPI_BYTE, send_to, 0, &dummy, 0, MPI_BYTE, recv_from, 0,
-                 comm, MPI_STATUSES_IGNORE);
+                 comm, MPI_STATUS_IGNORE);
   }
 }
