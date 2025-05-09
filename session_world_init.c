@@ -34,7 +34,7 @@ int main(void)
     times[0] = (init_end.tv_sec - start.tv_sec) + (init_end.tv_nsec - start.tv_nsec) / 1000000000.0;
     times[1] = (ex1_end.tv_sec - ex_start.tv_sec) + (ex1_end.tv_nsec - ex_start.tv_nsec) / 1000000000.0;
     times[2] = (ex2_end.tv_sec - ex1_end.tv_sec) + (ex2_end.tv_nsec - ex1_end.tv_nsec) / 1000000000.0;
-    MPI_Reduce(times, total_times, 3, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(times, total_times, 3, MPI_DOUBLE, MPI_SUM, 0, comm_world);
     if (rank == 0) {
         printf("session world init %f, pairwise1 %f, pairwise2 %f\n", total_times[0] / size, total_times[1] / size, total_times[2] / size);
     }
