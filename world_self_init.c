@@ -20,7 +20,7 @@ int main(void)
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   if (rank == 0) {
-      printf("self init %f\n", my_time);
+      printf("world self init %f\n", my_time);
   }
 
   MPI_Finalize();

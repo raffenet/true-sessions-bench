@@ -32,7 +32,7 @@ int main(void)
     assert(0);
   }
   if (rank == 0) {
-    printf("self init %f\n", my_time);
+    printf("session self init %f\n", my_time);
   }
 
   MPI_Comm_free(&comm_self);
