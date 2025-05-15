@@ -43,9 +43,12 @@ int main(int argc, char *argv[])
                                    &roots_comm);
     }    
 
-    /* MPI_Reduce(node_comm); */
-    /* MPI_Allreduce(node_roots_comm); */
-    /* MPI_Bcast(node_comm); */
+    int a=1, b;
+    MPI_Reduce(&a, &b, 1, MPI_INT, MPI_SUM, 0, node_comm);
+    if (is_root) {
+        MPI_Allreduce(MPI_IN_PLACE, &b, 1, MPI_INT, MPI_SUM, roots_comm);
+    }
+    MPI_Bcast(&b, 1, MPI_INT, 0, node_comm);
 
     times[0] = (init_end.tv_sec - start.tv_sec) + (init_end.tv_nsec - start.tv_nsec) / 1000000000.0;
     times[1] = (ex1_end.tv_sec - ex_start.tv_sec) + (ex1_end.tv_nsec - ex_start.tv_nsec) / 1000000000.0;
