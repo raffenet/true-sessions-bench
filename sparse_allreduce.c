@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    struct timespec start, init_end,
-        ex_start, ex1_end, ex2_end;
+    struct timespec allred_start, allred_end;
     double times[3], total_times[3];
 
     MPI_Session session;
@@ -41,22 +40,21 @@ int main(int argc, char *argv[])
         MPI_Group_incl(group, nnodes, proc_list, &roots_group);
         MPI_Comm_create_from_group(roots_group, "roots", MPI_INFO_NULL, MPI_ERRORS_ARE_FATAL,
                                    &roots_comm);
-    }    
+    }
 
     int a=1, b;
+    clock_gettime(CLOCK_MONOTONIC, &allred_start);
     MPI_Reduce(&a, &b, 1, MPI_INT, MPI_SUM, 0, node_comm);
     if (is_root) {
         MPI_Allreduce(MPI_IN_PLACE, &b, 1, MPI_INT, MPI_SUM, roots_comm);
     }
     MPI_Bcast(&b, 1, MPI_INT, 0, node_comm);
+    clock_gettime(CLOCK_MONOTONIC, &allred_end);
 
-    times[0] = (init_end.tv_sec - start.tv_sec) + (init_end.tv_nsec - start.tv_nsec) / 1000000000.0;
-    times[1] = (ex1_end.tv_sec - ex_start.tv_sec) + (ex1_end.tv_nsec - ex_start.tv_nsec) / 1000000000.0;
-    times[2] = (ex2_end.tv_sec - ex1_end.tv_sec) + (ex2_end.tv_nsec - ex1_end.tv_nsec) / 1000000000.0;
-    MPI_Reduce(times, total_times, 3, MPI_DOUBLE, MPI_SUM, 0, roots_comm);
+    time = (allred_end.tv_sec - allred_start.tv_sec) + (allred_end.tv_nsec - allred_start.tv_nsec) / 1000000000.0;
+    MPI_Reduce(&time, &total_time, 1, MPI_DOUBLE, MPI_SUM, 0, roots_comm);
     if (world_rank == 0) {
-        printf("world init %f, pairwise1 %f, pairwise2 %f\n", total_times[0] / world_size,
-               total_times[1] / world_size, total_times[2] / world_size);
+        printf("sparse allreduce %f\n", total_time / world_size);
     }
 
     free(proc_list);
