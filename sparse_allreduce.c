@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     struct timespec allred_start, allred_end;
-    double times[3], total_times[3];
+    double time, total_time;
 
     MPI_Session session;
     MPI_Group group;
