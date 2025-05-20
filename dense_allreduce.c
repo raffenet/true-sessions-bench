@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     MPI_Allreduce(&a, &b, 1, MPI_INT, MPI_SUM, comm_world);
     clock_gettime(CLOCK_MONOTONIC, &allred_end);
 
-    times[0] = (allred_end.tv_sec - allred_start.tv_sec) + (allred_end.tv_nsec - allred_start.tv_nsec) / 1000000000.0;
+    time = (allred_end.tv_sec - allred_start.tv_sec) + (allred_end.tv_nsec - allred_start.tv_nsec) / 1000000000.0;
     MPI_Reduce(&time, &total_time, 1, MPI_DOUBLE, MPI_SUM, 0, comm_world);
     MPI_Comm_rank(comm_world, &world_rank);
     MPI_Comm_size(comm_world, &world_size);
